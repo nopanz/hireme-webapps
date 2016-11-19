@@ -13,6 +13,24 @@ const paths = config.utils_paths
 // rendering, you'll want to remove this middleware.
 app.use(require('connect-history-api-fallback')())
 
+app.use('/api', (req, res, next) => {
+  delete req.header.host
+
+  const options = {
+    url: req.url,
+    baseUrl: config.api_host,
+    headers: JSON.parse(JSON.stringify(req.headers)),
+    method: req.method
+  }
+
+  if (req.is('application/json')) {
+    options.json = true
+    options.body = req.body
+  }
+
+  request(options).pipe(res)
+})
+
 // Apply gzip compression
 app.use(compress())
 

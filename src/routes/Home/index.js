@@ -1,6 +1,7 @@
-import HomeView from './components/HomeView'
-
+import Home from './containers/HomeContainer'
+import { UserIsAuthenticated } from 'utils/authWrappers'
 // Sync route definition
-export default {
-  component : HomeView
-}
+
+export default (store) => ({
+  component: UserIsAuthenticated(Home),
+})
