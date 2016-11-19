@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const webpackConfig = require('../build/webpack.config')
 const config = require('../config')
 const compress = require('compression')
+const request = require('request')
 
 const app = express()
 const paths = config.utils_paths
@@ -11,11 +12,9 @@ const paths = config.utils_paths
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement universal
 // rendering, you'll want to remove this middleware.
-app.use(require('connect-history-api-fallback')())
-
 app.use('/api', (req, res, next) => {
   delete req.header.host
-
+  console.log(req.url)
   const options = {
     url: req.url,
     baseUrl: config.api_host,
@@ -30,6 +29,10 @@ app.use('/api', (req, res, next) => {
 
   request(options).pipe(res)
 })
+
+app.use(require('connect-history-api-fallback')())
+
+
 
 // Apply gzip compression
 app.use(compress())

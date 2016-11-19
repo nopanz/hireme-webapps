@@ -24,14 +24,14 @@ export function login (username, password) {
       types: [
         LOGIN,
         {
-          type:LOGIN_SUCCESS,
+          type: LOGIN_SUCCESS,
           payload: (action, state, res) => res.json(),
           meta: {
             done: true,
             transition: {
               success: (prevState) => ({
-                pathname: prevState.router.locationBeforeTransitions.query.redirect || '/'
-              })
+                pathname: prevState.router.locationBeforeTransitions.query.redirect || '/dashboard',
+              }),
             },
           },
         },
@@ -106,6 +106,8 @@ const ACTION_HANDLERS = {
 const initialState = {
   loaded: false,
   user: null,
+  loggingIn: false,
+  token: null,
 }
 
 export default function authReducer (state = initialState, action) {
