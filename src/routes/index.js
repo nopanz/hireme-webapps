@@ -6,7 +6,15 @@ import LogInRoute from './Login'
     PlainRoute objects to build route definitions.   */
 
 export const createRoutes = (store) => ({
-  path        : '/',
+  path : '/',
+  onEnter: async (nextState, replace, cb) => {
+    const auth = JSON.parse(localStorage.getItem('reduxPersist:auth'))
+    if (auth && auth.token && auth.token.token) {
+      // const authActions = require('redux/modules/auth').actions  
+      // await store.dispatch(authActions.load(auth.token.token))
+    }
+    cb()
+  },
   component   : CoreLayout,
   indexRoute  : HomeRoute(store),
   childRoutes : [

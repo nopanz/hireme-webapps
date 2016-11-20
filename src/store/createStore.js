@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import makeRootReducer from './reducers'
 import { updateLocation } from './location'
 import { apiMiddleware } from 'redux-api-middleware'
+import { persistStore, autoRehydrate } from 'redux-persist'
 
 
 
@@ -33,6 +34,7 @@ export default (initialState = {}) => {
     makeRootReducer(),
     initialState,
     compose(
+      autoRehydrate(),
       applyMiddleware(...middleware),
       ...enhancers
     )
@@ -48,6 +50,6 @@ export default (initialState = {}) => {
       store.replaceReducer(reducers(store.asyncReducers))
     })
   }
-
+  persistStore(store, {whitelist:['auth']})
   return store
 }

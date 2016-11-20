@@ -5,9 +5,27 @@ import { REHYDRATE } from 'redux-persist/constants'
 export const LOGIN = 'hireme/auth/LOGIN'
 export const LOGIN_SUCCESS = 'hireme/auth/LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'hireme/auth/LOGIN_FAIL'
+export const LOAD_USER = 'hireme/auth/LOAD_USER'
+export const LOGOUT = 'hireme/auth/LOGOUT'
 
+export function logout () {
+  return async (dispatch) => {
+    await dispatch({
+      type: LOGOUT,
+    })
+    window.location = '/login'
+    localStorage.removeItem('reduxPersist:auth')
+  }
+}
 
-
+export function load (auth) {
+  return (dispatch, getState) => {
+    return dispatch ({
+      type:LOAD_USER,
+      auth,
+    })
+  }
+}
 
 export function login (username, password) {
   return {
@@ -30,7 +48,7 @@ export function login (username, password) {
             done: true,
             transition: {
               success: (prevState) => ({
-                pathname: prevState.router.locationBeforeTransitions.query.redirect || '/dashboard',
+                pathname: '/',
               }),
             },
           },
@@ -44,6 +62,7 @@ export function login (username, password) {
 
 export const actions = {
   login,
+  logout,
 }
 
 
@@ -54,27 +73,16 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       token: (incoming && incoming.token) ? incoming.token : null,
+      user: (incoming && incoming.user) ? incoming.user : null,
     }
   },
-  // [LOAD]: state => ({
-  //   ...state,
-  //   loading: true,
-  // }),
-  // [LOAD_SUCCESS]: (state, action) => ({
-  //   ...state,
-  //   loading: false,
-  //   user: action.payload,
-  //   loaded: true,
-  //   error: null,
-  // }),
-  // [LOAD_FAIL]: (state, action) => ({
-  //   ...state,
-  //   loading: false,
-  //   user: null,
-  //   loaded: false,
-  //   token: null,  // clear token on failure
-  //   error: action.payload,
-  // }),
+  [LOAD_USER]: (state, action) => ({
+    ...state,
+    loading: false,
+    user: action.auth.user,
+    loaded: true,
+    token: action.auth.token,
+  }),
   [LOGIN]: (state) => ({
     ...state,
     loggingIn: true,
@@ -82,22 +90,22 @@ const ACTION_HANDLERS = {
   [LOGIN_SUCCESS]: (state, action) => ({
     ...state,
     loggingIn: false,
-    token: action.payload,
+    token: action.payload.data.token,
+    user: action.payload.data.user,
+    loaded: true,
   }),
   [LOGIN_FAIL]: (state) => ({
     ...state,
     loggingIn: false,
     token: null,
   }),
-  // [LOGOUT]: state => ({
-  //   ...state,
-  //   loggingOut: true,
-  // }),
-  // [LOGOUT_SUCCESS]: state => ({
-  //   ...state,
-  //   loggingOut: false,
-  //   token: null,
-  // }),
+  [LOGOUT]: state => ({
+    ...state,
+    loaded: false,
+    user: null,
+    loggingIn: false,
+    token: null,
+  }),
 }
 
 // ------------------------------------

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
-import { login } from 'redux/modules/auth'
+import { login, logout } from 'redux/modules/auth'
+import { fetchCategory, findNearby } from 'redux/modules/home'
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
@@ -13,10 +14,14 @@ import Home from '../components/Home'
 
 const mapActionCreators = {
     login,
+    logout,
+    fetchCategory,
+    findNearby,
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  home: state.home,
 })  
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
