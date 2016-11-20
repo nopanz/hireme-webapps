@@ -57,7 +57,7 @@ class Login extends Component {
               <input placeholder='Username' onChange={this.handleInput} name='username' value={username}  />
             </FormField>
             <FormField>
-              <input placeholder='Password' onChange={this.handleInput} name='password' value={password} />
+              <input  type='password' placeholder='Password' onChange={this.handleInput} name='password' value={password} />
             </FormField>
           <Button primary onClick={this.handleSubmit} >Sign In</Button>
           </Form> 

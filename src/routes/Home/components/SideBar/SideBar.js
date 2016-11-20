@@ -38,7 +38,7 @@ class SideBar extends Component {
                  </Grid.Row>
                 </Grid>
                 <Grid.Row className='padd' >
-                     <Form.Select label='Job Category' name='gender' options={cat} placeholder='Category' />
+                     <Form.Select  name='gender' options={cat} placeholder='Category' />
                 </Grid.Row>
                 <Grid.Row className='padd' >
                     <Form.Input name='search' placeholder='Search Services' />
